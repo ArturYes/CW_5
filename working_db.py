@@ -110,7 +110,7 @@ class DBManager:
     def get_all_vacancies(self):
         """Метод получения списка всех вакансий с указанием названия компании,
         названия вакансии и зарплаты и ссылки на вакансию."""
-        sql_query = ("""SELECT employers.company_name, vacancy_name, salary_from, salary_to, valuta, vacancy_url 
+        sql_query = ("""SELECT employers.company_name, vacancy_name, salary_from, salary_to, currency, vacancy_url 
                            FROM vacancies
                            JOIN employers USING(employer_id)""")
         self.bd_connect(sql_query)
