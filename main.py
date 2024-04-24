@@ -1,6 +1,6 @@
 from config import config
 from hh_parser import HeadHunterAPI
-from working_db import create_database
+from working_db import create_database, save_data_to_database
 
 
 def main():
@@ -12,6 +12,7 @@ def main():
     db_name = 'cw_5_headhunter'
     params = config()
     create_database(db_name, params)
+    save_data_to_database(db_name, params, employer_data)
 
 
 if __name__ == '__main__':

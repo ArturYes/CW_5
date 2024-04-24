@@ -46,3 +46,33 @@ def create_database(db_name: str, params: dict) -> None:
         """)
     conn.commit()
     conn.close()
+
+
+def save_data_to_database(db_name: str, params: dict, data: list) -> None:
+    """
+    Функция сохранения данных в БД
+    :param db_name: название БД
+    :param params: параметры для подключения к БД
+    :param data: данные для сохранения
+    :return: None
+    """
+    conn = psycopg2.connect(dbname=db_name, **params)
+    with conn.cursor() as cur:
+        for employer in data:
+            cur.execute("""
+                INSERT INTO employers (employer_id, company_name, city, site_url, description)
+                VALUES (%s, %s, %s, %s, %s)
+                """,
+                        (employer['id'], employer['name'], employer['area'], employer['site_url'],
+                         employer['description'])
+                        )
+            for vacancy in employer['vacancies']:
+                cur.execute("""
+                    INSERT INTO vacancies (vacancy_id, employer_id, vacancy_name, salary_from, salary_to, currency, 
+                    experience, area, vacancy_url)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """, (vacancy['id'], employer['id'], vacancy['name'], vacancy['salary_from'], vacancy['salary_to'],
+                          vacancy['currency'], vacancy['experience'], vacancy['area'], vacancy['url_vacancy'])
+                            )
+    conn.commit()
+    conn.close()
